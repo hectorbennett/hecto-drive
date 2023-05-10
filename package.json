@@ -1,0 +1,10 @@
+{
+  "name": "hecto-drive",
+  "scripts": {
+    "dev": "vite",
+    "build": "yarn run build:ui && yarn run build:app",
+    "build:ui": "cd src/ui && yarn run build",
+    "build:app": "cd src/app && cargo xtask bundle hecto_drive --release",
+    "dev:ui": "cd src/ui && yarn run dev"
+  }
+}

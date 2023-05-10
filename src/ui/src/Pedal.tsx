@@ -97,7 +97,7 @@ function Knobs({
         <Knob
           diameter={80}
           min={0}
-          max={10}
+          max={1}
           label="DRIVE"
           value={drive}
           onChange={onChangeDrive}
@@ -105,7 +105,7 @@ function Knobs({
         <Knob
           diameter={80}
           min={0}
-          max={10}
+          max={1}
           label="GAIN"
           value={gain}
           onChange={onChangeGain}

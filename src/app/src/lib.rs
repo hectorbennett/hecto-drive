@@ -10,13 +10,11 @@ struct HectoDrive {
     params: Arc<HectoDriveParams>,
 }
 
-// #[derive(Deserialize)]
-// #[serde(tag = "type")]
-// enum Action {
-//     Init,
-//     SetSize { width: u32, height: u32 },
-//     SetGain { value: f32 },
-// }
+#[derive(Deserialize)]
+#[serde(tag = "type")]
+enum Action {
+    SetGain { value: f32 },
+}
 
 #[derive(Params)]
 struct HectoDriveParams {
@@ -123,34 +121,32 @@ impl Plugin for HectoDrive {
         .with_developer_mode(true)
         .with_event_loop(move |ctx, setter| {
             while let Some(event) = ctx.next_event() {
-                // ctx.resize(700, 700);
-                // match event {
-                //     WebviewEvent::JSON(value) => {
-                //         if let Ok(action) = serde_json::from_value(value) {
-                //             match action {
-                //                 Action::SetGain { value } => {
-                //                     setter.begin_set_parameter(&params.gain);
-                //                     setter.set_parameter_normalized(&params.gain, value);
-                //                     setter.end_set_parameter(&params.gain);
-                //                 }
-                //                 Action::SetSize { width, height } => {
-                //                     ctx.resize(700, 700);
-                //                 }
-                //                 Action::Init => {
-                //                     let _ = ctx.send_json(json!({
-                //                         "type": "set_size",
-                //                         "width": ctx.width.load(Ordering::Relaxed),
-                //                         "height": ctx.height.load(Ordering::Relaxed)
-                //                     }));
-                //                 }
-                //             }
-                //         } else {
-                //             panic!("Invalid action received from web UI.")
-                //         }
-                //     }
-                //     WebviewEvent::FileDropped(path) => println!("File dropped: {:?}", path),
-                //     _ => {}
-                // }
+                match event {
+                    WebviewEvent::JSON(value) => {
+                        if let Ok(action) = serde_json::from_value(value) {
+                            match action {
+                                Action::SetGain { value } => {
+                                    setter.begin_set_parameter(&params.gain);
+                                    setter.set_parameter_normalized(&params.gain, value);
+                                    setter.end_set_parameter(&params.gain);
+                                } // Action::SetSize { width, height } => {
+                                  //     ctx.resize(700, 700);
+                                  // }
+                                  // Action::Init => {
+                                  //     let _ = ctx.send_json(json!({
+                                  //         "type": "set_size",
+                                  //         "width": ctx.width.load(Ordering::Relaxed),
+                                  //         "height": ctx.height.load(Ordering::Relaxed)
+                                  //     }));
+                                  // }
+                            }
+                        } else {
+                            panic!("Invalid action received from web UI.")
+                        }
+                    }
+                    WebviewEvent::FileDropped(path) => println!("File dropped: {:?}", path),
+                    _ => {}
+                }
             }
 
             if gain_value_changed.swap(false, Ordering::Relaxed) {

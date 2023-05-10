@@ -6,8 +6,12 @@ use serde_json::json;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
+mod drive;
+
 struct HectoDrive {
     params: Arc<HectoDriveParams>,
+
+    sample_rate: f32,
 }
 
 #[derive(Deserialize)]
@@ -32,6 +36,7 @@ impl Default for HectoDrive {
     fn default() -> Self {
         Self {
             params: Arc::new(HectoDriveParams::default()),
+            sample_rate: 1.0,
         }
     }
 }
@@ -54,17 +59,16 @@ impl Default for HectoDriveParams {
             // drive
             drive: FloatParam::new(
                 "Drive",
-                util::db_to_gain(0.0),
+                200.0,
                 FloatRange::Skewed {
-                    min: util::db_to_gain(-30.0),
-                    max: util::db_to_gain(30.0),
-                    factor: FloatRange::gain_skew_factor(-30.0, 30.0),
+                    min: 100.0,
+                    max: 10_000.0,
+                    factor: FloatRange::skew_factor(-2.0),
                 },
             )
             .with_smoother(SmoothingStyle::Logarithmic(50.0))
-            .with_unit(" dB")
             .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
-            .with_string_to_value(formatters::s2v_f32_gain_to_db())
+            // .with_string_to_value(formatters::s2v_f32_gain_to_db())
             .with_callback(drive_param_callback.clone()),
             drive_value_changed,
 
@@ -127,11 +131,12 @@ impl Plugin for HectoDrive {
         _aux: &mut AuxiliaryBuffers,
         _context: &mut impl ProcessContext<Self>,
     ) -> ProcessStatus {
-        for channel_samples in buffer.iter_samples() {
+        for mut channel_samples in buffer.iter_samples() {
+            let drive = self.params.drive.smoothed.next();
             let gain = self.params.gain.smoothed.next();
 
-            for sample in channel_samples {
-                *sample *= gain;
+            for sample in channel_samples.iter_mut() {
+                *sample = drive::drive(sample.clone().into(), drive) * gain;
             }
         }
 

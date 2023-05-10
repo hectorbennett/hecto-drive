@@ -29,6 +29,7 @@ function PedalOuter({ children }: { children: ReactNode }) {
         width: 280px;
         height: 520px;
         overflow: hidden;
+        user-select: none;
       `}
     >
       <div

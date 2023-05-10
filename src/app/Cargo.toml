@@ -1,0 +1,35 @@
+[package]
+name = "hecto_drive"
+version = "0.0.1"
+edition = "2021"
+authors = ["Hector Bennett <contact@hectorbennett.com>"]
+license = "ISC"
+
+description = "A simple gain plugin with a webview GUI"
+
+[workspace]
+members = ["xtask"]
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git", features = [
+    "assert_process_allocs",
+    "standalone",
+] }
+nih_plug_webview = { git = "https://github.com/maxjvh/nih-plug-webview.git" }
+# atomic_float = "0.1"
+# parking_lot = "0.12.1"
+# lazy_static = "1.4.0"
+serde = { version = "1.0.162", features = ["derive"] }
+serde_json = "1.0.96"
+
+[profile.release]
+lto = "thin"
+strip = "symbols"
+
+[profile.profiling]
+inherits = "release"
+debug = true
+strip = "none"

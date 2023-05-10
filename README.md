@@ -1,5 +1,5 @@
 # hecto-drive
-A simple distortion plugin written in rust.
+A simple distortion plugin, written in Rust and React.
 
 Built with [nih-plug](https://github.com/robbert-vdh/nih-plug/) and [nih-plug-webview](https://github.com/maxjvh/nih-plug-webview)
 

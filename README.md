@@ -3,4 +3,4 @@ A simple distortion plugin, written in Rust and React.
 
 Built with [nih-plug](https://github.com/robbert-vdh/nih-plug/) and [nih-plug-webview](https://github.com/maxjvh/nih-plug-webview)
 
-<img width="368" alt="Screenshot 2023-05-10 at 16 16 01" src="https://github.com/hectorbennett/hecto-drive/assets/23317027/05d6328e-10fe-4267-ae59-fb17467f49b5">
+<img width="340" alt="Screenshot 2023-05-10 at 16 21 12" src="https://github.com/hectorbennett/hecto-drive/assets/23317027/d08564c1-7ae4-46c8-8d71-b3b7853b0f1f">

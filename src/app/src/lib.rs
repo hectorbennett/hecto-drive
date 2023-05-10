@@ -163,16 +163,7 @@ impl Plugin for HectoDrive {
                                     setter.begin_set_parameter(&params.gain);
                                     setter.set_parameter_normalized(&params.gain, value);
                                     setter.end_set_parameter(&params.gain);
-                                } // Action::SetSize { width, height } => {
-                                  //     ctx.resize(700, 700);
-                                  // }
-                                  // Action::Init => {
-                                  //     let _ = ctx.send_json(json!({
-                                  //         "type": "set_size",
-                                  //         "width": ctx.width.load(Ordering::Relaxed),
-                                  //         "height": ctx.height.load(Ordering::Relaxed)
-                                  //     }));
-                                  // }
+                                }
                             }
                         } else {
                             panic!("Invalid action received from web UI.")

@@ -13,11 +13,16 @@ struct HectoDrive {
 #[derive(Deserialize)]
 #[serde(tag = "type")]
 enum Action {
+    SetDrive { value: f32 },
     SetGain { value: f32 },
 }
 
 #[derive(Params)]
 struct HectoDriveParams {
+    #[id = "drive"]
+    pub drive: FloatParam,
+    drive_value_changed: Arc<AtomicBool>,
+
     #[id = "gain"]
     pub gain: FloatParam,
     gain_value_changed: Arc<AtomicBool>,
@@ -33,14 +38,37 @@ impl Default for HectoDrive {
 
 impl Default for HectoDriveParams {
     fn default() -> Self {
-        let gain_value_changed = Arc::new(AtomicBool::new(false));
+        let drive_value_changed = Arc::new(AtomicBool::new(false));
+        let d = drive_value_changed.clone();
+        let drive_param_callback = Arc::new(move |_: f32| {
+            d.store(true, Ordering::Relaxed);
+        });
 
-        let v = gain_value_changed.clone();
-        let param_callback = Arc::new(move |_: f32| {
-            v.store(true, Ordering::Relaxed);
+        let gain_value_changed = Arc::new(AtomicBool::new(false));
+        let g = gain_value_changed.clone();
+        let gain_param_callback = Arc::new(move |_: f32| {
+            g.store(true, Ordering::Relaxed);
         });
 
         Self {
+            // drive
+            drive: FloatParam::new(
+                "Drive",
+                util::db_to_gain(0.0),
+                FloatRange::Skewed {
+                    min: util::db_to_gain(-30.0),
+                    max: util::db_to_gain(30.0),
+                    factor: FloatRange::gain_skew_factor(-30.0, 30.0),
+                },
+            )
+            .with_smoother(SmoothingStyle::Logarithmic(50.0))
+            .with_unit(" dB")
+            .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
+            .with_string_to_value(formatters::s2v_f32_gain_to_db())
+            .with_callback(drive_param_callback.clone()),
+            drive_value_changed,
+
+            // gain
             gain: FloatParam::new(
                 "Gain",
                 util::db_to_gain(0.0),
@@ -54,7 +82,7 @@ impl Default for HectoDriveParams {
             .with_unit(" dB")
             .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
             .with_string_to_value(formatters::s2v_f32_gain_to_db())
-            .with_callback(param_callback.clone()),
+            .with_callback(gain_param_callback.clone()),
             gain_value_changed,
         }
     }
@@ -112,6 +140,7 @@ impl Plugin for HectoDrive {
 
     fn editor(&mut self, _async_executor: AsyncExecutor<Self>) -> Option<Box<dyn Editor>> {
         let params = self.params.clone();
+        let drive_value_changed = self.params.drive_value_changed.clone();
         let gain_value_changed = self.params.gain_value_changed.clone();
         let editor = WebViewEditor::new(
             HTMLSource::String(include_str!("../../ui/dist/index.html")),
@@ -125,6 +154,11 @@ impl Plugin for HectoDrive {
                     WebviewEvent::JSON(value) => {
                         if let Ok(action) = serde_json::from_value(value) {
                             match action {
+                                Action::SetDrive { value } => {
+                                    setter.begin_set_parameter(&params.drive);
+                                    setter.set_parameter_normalized(&params.drive, value);
+                                    setter.end_set_parameter(&params.drive);
+                                }
                                 Action::SetGain { value } => {
                                     setter.begin_set_parameter(&params.gain);
                                     setter.set_parameter_normalized(&params.gain, value);
@@ -149,12 +183,19 @@ impl Plugin for HectoDrive {
                 }
             }
 
+            if drive_value_changed.swap(false, Ordering::Relaxed) {
+                let _ = ctx.send_json(json!({
+                    "type": "param_change",
+                    "param": "drive",
+                    "value": params.drive.unmodulated_normalized_value(),
+                }));
+            }
+
             if gain_value_changed.swap(false, Ordering::Relaxed) {
                 let _ = ctx.send_json(json!({
                     "type": "param_change",
                     "param": "gain",
                     "value": params.gain.unmodulated_normalized_value(),
-                    "text": params.gain.to_string()
                 }));
             }
         });

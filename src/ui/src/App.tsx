@@ -21,6 +21,11 @@ function App() {
     gain: 0.5,
   });
 
+  const setDrive = (drive: number) => {
+    setPedalState((s) => ({ ...s, drive }));
+    sendToPlugin({ type: "SetDrive", value: drive });
+  };
+
   const setGain = (gain: number) => {
     setPedalState((s) => ({ ...s, gain }));
     sendToPlugin({ type: "SetGain", value: gain });
@@ -53,8 +58,8 @@ function App() {
     >
       <Pedal
         {...pedalState}
-        onChangeDrive={(drive) => setPedalState((s) => ({ ...s, drive }))}
-        onChangeGain={(gain) => setGain(gain)}
+        onChangeDrive={setDrive}
+        onChangeGain={setGain}
         onToggleOn={() => setPedalState((s) => ({ ...s, on: !s.on }))}
       />
     </div>

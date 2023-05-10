@@ -6,6 +6,7 @@ export default function Logo() {
       css={css`
         font-family: "Elphinstone";
         font-size: 2.2rem;
+        color: white;
       `}
     >
       el-hectro-harmonix

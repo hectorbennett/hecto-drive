@@ -6,40 +6,17 @@ import { css } from "@emotion/react";
 import shadow from "./shadow";
 import Led from "./Led";
 
-const highlightSize = 4;
-
 const highlightInnerTop = shadow({
-  inset: true,
   x: 0,
-  y: highlightSize,
+  y: 30,
   colour: "rgba(255, 255, 255, 0.5)",
 });
 
 const shadowInnerBottom = shadow({
-  inset: true,
   x: 0,
-  y: -highlightSize,
+  y: -30,
   colour: "rgba(0, 0, 0, 0.5)",
 });
-
-const dropShadowSmall = shadow({
-  y: 2,
-  blur: 2,
-  colour: "rgba(0, 0, 0, 0.25)",
-});
-
-const dropShadowLarge = shadow({
-  y: 15,
-  blur: 100,
-  colour: "rgba(0, 0, 0, 0.5)",
-});
-
-const shadows = [
-  highlightInnerTop,
-  shadowInnerBottom,
-  dropShadowSmall,
-  dropShadowLarge,
-];
 
 function PedalOuter({ children }: { children: ReactNode }) {
   const gradient1 = "#66fff8";
@@ -49,29 +26,39 @@ function PedalOuter({ children }: { children: ReactNode }) {
     <div
       css={css`
         background: linear-gradient(180deg, ${gradient1} 0%, ${gradient2} 100%);
-        box-shadow: ${shadows.join(", ")};
-        border-radius: 20px;
         width: 280px;
         height: 520px;
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        padding: 10px;
-        align-items: center;
+        overflow: hidden;
       `}
     >
       <div
         css={css`
-          border: 2px solid white;
-          flex: 1;
-          border-radius: 13px;
+          box-shadow: ${[highlightInnerTop, shadowInnerBottom].join(", ")};
+          border-radius: 20px;
+          display: flex;
+          flex-direction: column;
+          box-sizing: border-box;
+          padding: 10px;
+          align-items: center;
           width: 100%;
-          overflow: hidden;
+          height: 100%;
+          height: CALC(100% - 8px);
+          margin: 4px 0px;
         `}
       >
-        {children}
+        <div
+          css={css`
+            border: 2px solid white;
+            flex: 1;
+            border-radius: 13px;
+            width: 100%;
+            overflow: hidden;
+          `}
+        >
+          {children}
+        </div>
+        <Logo />
       </div>
-      <Logo />
     </div>
   );
 }
@@ -90,7 +77,6 @@ function Knobs({
   return (
     <div
       css={css`
-        // background: #1a1b1f;
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -128,6 +114,7 @@ function Knobs({
         css={css`
           font-size: 3rem;
           font-family: "Arizonia", cursive;
+          color: white;
         `}
       >
         Hecto

@@ -4,9 +4,9 @@ use std::f32::consts::PI;
 pub fn drive(x: f32, amount: f32) -> f32 {
     let y = x * amount / 100.0;
     if y >= 0.0 {
-        return y.tanh();
+        y.tanh()
     } else {
-        return (y.sinh() - 0.2 * y * (PI * y).sin()).tanh();
+        (y.sinh() - 0.2 * y * (PI * y).sin()).tanh()
     }
 }
 

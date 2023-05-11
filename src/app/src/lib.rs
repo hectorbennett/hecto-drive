@@ -10,8 +10,6 @@ mod drive;
 
 struct HectoDrive {
     params: Arc<HectoDriveParams>,
-
-    sample_rate: f32,
 }
 
 #[derive(Deserialize)]
@@ -36,7 +34,6 @@ impl Default for HectoDrive {
     fn default() -> Self {
         Self {
             params: Arc::new(HectoDriveParams::default()),
-            sample_rate: 1.0,
         }
     }
 }
@@ -68,8 +65,7 @@ impl Default for HectoDriveParams {
             )
             .with_smoother(SmoothingStyle::Logarithmic(50.0))
             .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
-            // .with_string_to_value(formatters::s2v_f32_gain_to_db())
-            .with_callback(drive_param_callback.clone()),
+            .with_callback(drive_param_callback),
             drive_value_changed,
 
             // gain
@@ -86,7 +82,7 @@ impl Default for HectoDriveParams {
             .with_unit(" dB")
             .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
             .with_string_to_value(formatters::s2v_f32_gain_to_db())
-            .with_callback(gain_param_callback.clone()),
+            .with_callback(gain_param_callback),
             gain_value_changed,
         }
     }
@@ -136,7 +132,7 @@ impl Plugin for HectoDrive {
             let gain = self.params.gain.smoothed.next();
 
             for sample in channel_samples.iter_mut() {
-                *sample = drive::drive(sample.clone().into(), drive) * gain;
+                *sample = drive::drive(*sample, drive) * gain;
             }
         }
 

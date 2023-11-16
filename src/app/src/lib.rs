@@ -1,8 +1,24 @@
-// Forked and modified from: https://github.com/robbert-vdh/nih-plug/tree/master/plugins/examples/gain
-use nih_plug::prelude::*;
-use nih_plug_webview::*;
+use nih_plug::audio_setup::{AudioIOLayout, AuxiliaryBuffers, PortNames};
+use nih_plug::buffer::Buffer;
+use nih_plug::context::gui::AsyncExecutor;
+use nih_plug::context::process::ProcessContext;
+use nih_plug::editor::Editor;
+use nih_plug::midi::MidiConfig;
+use nih_plug::nih_debug_assert_eq;
+use nih_plug::params::range::FloatRange;
+use nih_plug::params::smoothing::SmoothingStyle;
+use nih_plug::params::{FloatParam, Params};
+use nih_plug::plugin::clap::ClapPlugin;
+use nih_plug::plugin::vst3::Vst3Plugin;
+use nih_plug::plugin::{Plugin, ProcessStatus};
+use nih_plug::prelude::Param;
+use nih_plug::wrapper::clap::features::ClapFeature;
+use nih_plug::wrapper::vst3::subcategories::Vst3SubCategory;
+use nih_plug::{formatters, nih_export_clap, nih_export_vst3, util};
+use nih_plug_webview::{HTMLSource, WebViewEditor};
 use serde::Deserialize;
 use serde_json::json;
+use std::num::NonZeroU32;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
@@ -149,29 +165,23 @@ impl Plugin for HectoDrive {
         )
         .with_background_color((150, 150, 150, 255))
         .with_developer_mode(true)
-        .with_event_loop(move |ctx, setter| {
-            while let Some(event) = ctx.next_event() {
-                match event {
-                    WebviewEvent::JSON(value) => {
-                        if let Ok(action) = serde_json::from_value(value) {
-                            match action {
-                                Action::SetDrive { value } => {
-                                    setter.begin_set_parameter(&params.drive);
-                                    setter.set_parameter_normalized(&params.drive, value);
-                                    setter.end_set_parameter(&params.drive);
-                                }
-                                Action::SetGain { value } => {
-                                    setter.begin_set_parameter(&params.gain);
-                                    setter.set_parameter_normalized(&params.gain, value);
-                                    setter.end_set_parameter(&params.gain);
-                                }
-                            }
-                        } else {
-                            panic!("Invalid action received from web UI.")
+        .with_event_loop(move |ctx, setter, window| {
+            while let Ok(value) = ctx.next_event() {
+                if let Ok(action) = serde_json::from_value(value) {
+                    match action {
+                        Action::SetDrive { value } => {
+                            setter.begin_set_parameter(&params.drive);
+                            setter.set_parameter_normalized(&params.drive, value);
+                            setter.end_set_parameter(&params.drive);
+                        }
+                        Action::SetGain { value } => {
+                            setter.begin_set_parameter(&params.gain);
+                            setter.set_parameter_normalized(&params.gain, value);
+                            setter.end_set_parameter(&params.gain);
                         }
                     }
-                    WebviewEvent::FileDropped(path) => println!("File dropped: {:?}", path),
-                    _ => {}
+                } else {
+                    panic!("Invalid action received from web UI.")
                 }
             }
 

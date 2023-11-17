@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import "./App.css";
-import Pedal from "./Pedal";
+import { Unit } from "./Unit";
 
 const sendToPlugin = (msg: unknown) => {
   /* Send message to nih_plug_webview */
@@ -16,9 +16,8 @@ const sendToPlugin = (msg: unknown) => {
 
 function App() {
   const [pedalState, setPedalState] = useState({
-    on: false,
-    drive: 0.5,
-    gain: 0.5,
+    drive: 50,
+    gain: 50,
   });
 
   const setDrive = (drive: number) => {
@@ -56,12 +55,13 @@ function App() {
         gap: 20px;
       `}
     >
-      <Pedal
+      {/* <Pedal
         {...pedalState}
         onChangeDrive={setDrive}
         onChangeGain={setGain}
         onToggleOn={() => setPedalState((s) => ({ ...s, on: !s.on }))}
-      />
+      /> */}
+      <Unit {...pedalState} onChangeDrive={setDrive} onChangeGain={setGain} />
     </div>
   );
 }

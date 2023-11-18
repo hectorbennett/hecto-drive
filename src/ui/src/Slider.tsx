@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { KeyboardEvent, ReactNode } from "react";
+import { fractionToValue, valueToFraction, round } from "./utils";
 
 /**
  * Slider props
@@ -36,22 +37,19 @@ export const Slider = ({
   onChange,
   label,
 }: SliderProps) => {
-  const percentage = (value / (max - min)) * 100;
-
-  // min = width
-  // max = height
-
-  // height = width + percentage * (height - width);
+  const fraction = valueToFraction(value, min, max);
 
   const startDrag = (e: React.MouseEvent) => {
-    const dragStartValue = value;
     const dragStartY = e.screenY;
 
     const handleMove = (e: MouseEvent) => {
       const dragCurrY = e.screenY;
-      const pixelsMoved = dragCurrY - dragStartY;
-      const delta = (pixelsMoved * 100) / (height + width);
-      const newValue = Math.max(Math.min(dragStartValue - delta, max), min);
+      const pixelsMoved = dragStartY - dragCurrY;
+      const fractionMoved = valueToFraction(pixelsMoved, 0, height - width);
+      const newValue = Math.max(
+        Math.min(fractionToValue(fraction + fractionMoved, min, max), max),
+        min
+      );
       onChange && onChange(newValue);
     };
 
@@ -62,14 +60,12 @@ export const Slider = ({
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    const multiplier = e.shiftKey ? 1 : 10;
-
     if (e.key === "ArrowDown" || e.key === "ArrowRight") {
       e.preventDefault();
-      onChange && onChange(Math.max(min, value - 1 * multiplier));
+      onChange && onChange(Math.max(min, value - 1));
     } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
       e.preventDefault();
-      onChange && onChange(Math.min(max, value + 1 * multiplier));
+      onChange && onChange(Math.min(max, value + 1));
     }
   };
 
@@ -101,7 +97,7 @@ export const Slider = ({
       >
         <div
           style={{
-            height: `${width + 0.01 * percentage * (height - width)}px`,
+            height: `${width + fraction * (height - width)}px`,
           }}
           css={css`
             border: 2px solid black;
@@ -140,7 +136,7 @@ export const Slider = ({
             `}
             onMouseDown={startDrag}
           >
-            {Math.round(value)}
+            {round(value, 0)}
           </div>
         </div>
       </div>

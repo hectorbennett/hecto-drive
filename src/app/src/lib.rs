@@ -161,7 +161,7 @@ impl Plugin for HectoDrive {
         let gain_value_changed = self.params.gain_value_changed.clone();
         let editor = WebViewEditor::new(
             HTMLSource::String(include_str!("../../ui/dist/index.html")),
-            (280, 520),
+            (550, 450),
         )
         .with_background_color((150, 150, 150, 255))
         .with_developer_mode(true)

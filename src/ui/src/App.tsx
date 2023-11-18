@@ -16,8 +16,8 @@ const sendToPlugin = (msg: unknown) => {
 
 function App() {
   const [pedalState, setPedalState] = useState({
-    drive: 50,
-    gain: 50,
+    drive: 0.5,
+    gain: 0.5,
   });
 
   const setDrive = (drive: number) => {

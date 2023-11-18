@@ -1,6 +1,8 @@
 import { css } from "@emotion/react";
 import { Slider } from "./Slider";
 
+import { fractionToValue, valueToFraction } from "./utils";
+
 interface UnitProps {
   drive: number;
   gain: number;
@@ -24,6 +26,8 @@ export const Unit = ({
         gap: 10px;
         align-items: stretch;
         background: #e69c45;
+        width: 100%;
+        height: 100%;
       `}
     >
       <div
@@ -42,10 +46,23 @@ export const Unit = ({
           align-items: center;
           justify-content: space-around;
           background: #ffe1be;
+          height: 100%;
         `}
       >
-        <Slider value={gain} label="Gain" onChange={onChangeGain} />
-        <Slider value={drive} label="Drive" onChange={onChangeDrive} />
+        <Slider
+          value={fractionToValue(gain, -30, 30)}
+          min={-30}
+          max={30}
+          label="Gain"
+          onChange={(value) => onChangeGain(valueToFraction(value, -30, -30))}
+        />
+        <Slider
+          value={drive}
+          min={0}
+          max={1}
+          label="Drive"
+          onChange={onChangeDrive}
+        />
       </div>
     </div>
   );

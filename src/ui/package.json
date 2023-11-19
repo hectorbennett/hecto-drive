@@ -14,7 +14,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "unstated-next": "^1.1.0"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.5.3",

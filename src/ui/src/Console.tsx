@@ -1,3 +1,14 @@
+import { LogsContainer } from "./Console.container";
+
 export const Console = () => {
-  return <div>Hello world</div>;
+  const { logs } = LogsContainer.useContainer();
+  return (
+    <div>
+      {logs.map((log: unknown) => (
+        <div>
+          <code>{log.toString()}</code>
+        </div>
+      ))}
+    </div>
+  );
 };

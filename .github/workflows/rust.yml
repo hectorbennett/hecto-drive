@@ -1,0 +1,33 @@
+name: Rust
+
+on:
+  push:
+    branches: [$default-branch]
+  pull_request:
+    branches: [$default-branch]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build
+        working-directory: ${{ github.workspace }}/src/app
+        run: cargo xtask bundle hecto_drive --release
+
+      - name: Lint
+        working-directory: ${{ github.workspace }}/src/app
+        run: cargo clippy -- -D warnings
+
+      - name: Fmt
+        working-directory: ${{ github.workspace }}/src/app
+        run: cargo fmt
+
+      - name: Run tests
+        working-directory: ${{ github.workspace }}/src/app
+        run: cargo test --verbose

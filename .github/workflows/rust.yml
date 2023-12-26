@@ -31,3 +31,5 @@ jobs:
       - name: Run tests
         working-directory: ${{ github.workspace }}/src/app
         run: cargo test --verbose
+
+        

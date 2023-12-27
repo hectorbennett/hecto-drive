@@ -25,6 +25,10 @@ jobs:
       - name: Install dependencies
         working-directory: ${{ github.workspace }}/src/ui
         run: npm ci
+    
+      - name: Type Check
+        working-directory: ${{ github.workspace }}/src/ui
+        run: npm run tsc
 
       - name: Build
         working-directory: ${{ github.workspace }}/src/ui

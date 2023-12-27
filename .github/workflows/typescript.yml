@@ -19,13 +19,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 20.x
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: ${{ github.workspace }}/src/ui/package-lock.json
 
       - name: Install dependencies
         working-directory: ${{ github.workspace }}/src/ui
         run: npm ci
-    
+
       - name: Type Check
         working-directory: ${{ github.workspace }}/src/ui
         run: npm run tsc
@@ -37,13 +37,11 @@ jobs:
       - name: Test
         working-directory: ${{ github.workspace }}/src/ui
         run: npm run test
-    
+
       - name: Lint
         working-directory: ${{ github.workspace }}/src/ui
         run: npm run lint-check
-    
+
       - name: Format
         working-directory: ${{ github.workspace }}/src/ui
         run: npm run format-check
-
-        

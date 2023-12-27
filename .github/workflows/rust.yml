@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: sudo apt-get install -y libgl-dev libxcursor-dev libpango1.0-dev libgdk-pixbuf-2.0-dev libjavascriptcoregtk-4.1-dev libsoup-3.0-dev libgtk-3-dev libwebkit2gtk-4.1-devn libasound2-dev
+        run: sudo apt-get install -y libgl-dev libxcursor-dev libpango1.0-dev libgdk-pixbuf-2.0-dev libjavascriptcoregtk-4.1-dev libsoup-3.0-dev libgtk-3-dev libwebkit2gtk-4.1-dev libasound2-dev
 
       - name: Build
         working-directory: ${{ github.workspace }}/src/app

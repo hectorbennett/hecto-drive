@@ -165,7 +165,7 @@ impl Plugin for HectoDrive {
         )
         .with_background_color((150, 150, 150, 255))
         .with_developer_mode(true)
-        .with_event_loop(move |ctx, setter, window| {
+        .with_event_loop(move |ctx, setter, _window| {
             while let Ok(value) = ctx.next_event() {
                 if let Ok(action) = serde_json::from_value(value) {
                     match action {

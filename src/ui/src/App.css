@@ -353,19 +353,25 @@ template {
 @font-face {
   font-family: "Elphinstone";
   font-style: normal;
-  src: local("Elphinstone"), url(./assets/Elphinstone.ttf) format("truetype");
+  src:
+    local("Elphinstone"),
+    url(./assets/Elphinstone.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Arizonia";
   font-style: normal;
-  src: local("Arizonia"), url(./assets/Arizonia-Regular.ttf) format("truetype");
+  src:
+    local("Arizonia"),
+    url(./assets/Arizonia-Regular.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Russo One";
   font-style: normal;
-  src: local("Russo One"), url(./assets/RussoOne-Regular.ttf) format("truetype");
+  src:
+    local("Russo One"),
+    url(./assets/RussoOne-Regular.ttf) format("truetype");
 }
 
 * {

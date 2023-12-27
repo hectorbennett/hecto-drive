@@ -69,7 +69,7 @@ impl Default for HectoDriveParams {
         });
 
         Self {
-            // drive
+            // Drive
             drive: FloatParam::new(
                 "Drive",
                 200.0,
@@ -84,7 +84,7 @@ impl Default for HectoDriveParams {
             .with_callback(drive_param_callback),
             drive_value_changed,
 
-            // gain
+            // Gain
             gain: FloatParam::new(
                 "Gain",
                 util::db_to_gain(0.0),
@@ -189,7 +189,7 @@ impl Plugin for HectoDrive {
                 let _ = ctx.send_json(json!({
                     "type": "param_change",
                     "param": "drive",
-                    "value": params.drive.unmodulated_normalized_value(),
+                    "value": params.drive.value(),
                 }));
             }
 
@@ -197,7 +197,7 @@ impl Plugin for HectoDrive {
                 let _ = ctx.send_json(json!({
                     "type": "param_change",
                     "param": "gain",
-                    "value": params.gain.unmodulated_normalized_value(),
+                    "value": params.gain.value(),
                 }));
             }
         });

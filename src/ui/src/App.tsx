@@ -15,6 +15,8 @@ const sendToPlugin = (msg: unknown) => {
 };
 
 function App() {
+  const [msg, setMsg] = useState<object>({ Hello: "World" });
+
   const [pedalState, setPedalState] = useState({
     drive: 0.5,
     gain: 0.5,
@@ -34,6 +36,7 @@ function App() {
     /* receive messages from nih_plug_webview */
     // @ts-ignore
     window.onPluginMessage = (msg) => {
+      setMsg(msg);
       switch (msg.type) {
         case "param_change": {
           setPedalState((s) => ({ ...s, [msg.param]: msg.value }));
@@ -61,7 +64,22 @@ function App() {
         onChangeGain={setGain}
         onToggleOn={() => setPedalState((s) => ({ ...s, on: !s.on }))}
       /> */}
-      <Unit {...pedalState} onChangeDrive={setDrive} onChangeGain={setGain} />
+      <div
+        css={css`
+          height: 200px;
+          display: flex;
+          align-items: center;
+        `}
+      >
+        {JSON.stringify(msg)}
+      </div>
+      <div
+        css={css`
+          overflow: hidden;
+        `}
+      >
+        <Unit {...pedalState} onChangeDrive={setDrive} onChangeGain={setGain} />
+      </div>
     </div>
   );
 }

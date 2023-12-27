@@ -1,12 +1,8 @@
 {
   "name": "hecto-drive",
   "scripts": {
-    "dev": "vite",
     "build": "npm run build:ui && npm run build:app",
     "build:ui": "cd src/ui && npm run build",
-    "build:app": "cd src/app && cargo xtask bundle hecto_drive --release",
-    "dev:ui": "cd src/ui && npm run dev",
-    "lint:rs:check": "cd src/app && cargo clippy -- -D warnings",
-    "lint:rs:fix": "cd src/app && cargo clippy --fix"
+    "build:app": "cd src/app && cargo xtask bundle hecto_drive --release"
   }
 }

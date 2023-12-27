@@ -48,7 +48,7 @@ export const Slider = ({
       const fractionMoved = valueToFraction(pixelsMoved, 0, height - width);
       const newValue = Math.max(
         Math.min(fractionToValue(fraction + fractionMoved, min, max), max),
-        min
+        min,
       );
       onChange && onChange(newValue);
     };

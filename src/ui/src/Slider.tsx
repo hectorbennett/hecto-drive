@@ -24,6 +24,9 @@ interface SliderProps {
   /** Maximum possible value. */
   max?: number;
 
+  /** The number of decimal places to round to. */
+  decimalPlaces?: number;
+
   /** The slider label. */
   label?: ReactNode;
 }
@@ -33,6 +36,7 @@ export const Slider = ({
   height = 200,
   min = 0,
   max = 100,
+  decimalPlaces = 0,
   value,
   onChange,
   label,
@@ -136,7 +140,7 @@ export const Slider = ({
             `}
             onMouseDown={startDrag}
           >
-            {round(value, 0)}
+            {round(value, decimalPlaces)}
           </div>
         </div>
       </div>

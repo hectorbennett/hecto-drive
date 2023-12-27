@@ -45,8 +45,20 @@ const InteractiveExample = () => {
     >
       <Slider value={value1} onChange={setValue1} min={0} max={60} />
       <Slider value={value2} onChange={setValue2} min={-100} max={100} />
-      <Slider value={value3} onChange={setValue3} min={0} max={3} decimalPlaces={1}/>
-      <Slider value={value4} onChange={setValue4} min={0} max={0.1} decimalPlaces={2} />
+      <Slider
+        value={value3}
+        onChange={setValue3}
+        min={0}
+        max={3}
+        decimalPlaces={1}
+      />
+      <Slider
+        value={value4}
+        onChange={setValue4}
+        min={0}
+        max={0.1}
+        decimalPlaces={2}
+      />
     </div>
   );
 };

@@ -18,18 +18,24 @@ function App() {
   const [msg, setMsg] = useState<object>({ Hello: "World" });
 
   const [pedalState, setPedalState] = useState({
-    drive: 0.5,
-    gain: 0.5,
+    drive: {
+      value: 1,
+      text: "80",
+    },
+    gain: {
+      value: 1,
+      text: "30.00 dB",
+    },
   });
 
-  const setDrive = (drive: number) => {
-    setPedalState((s) => ({ ...s, drive }));
-    sendToPlugin({ type: "SetDrive", value: drive });
+  const setDrive = (value: number) => {
+    // setPedalState((s) => ({ ...s, ...{ drive: state } }));
+    sendToPlugin({ type: "SetDrive", value });
   };
 
-  const setGain = (gain: number) => {
-    setPedalState((s) => ({ ...s, gain }));
-    sendToPlugin({ type: "SetGain", value: gain });
+  const setGain = (value: number) => {
+    // setPedalState((s) => ({ ...s, ...{ gain: state } }));
+    sendToPlugin({ type: "SetGain", value });
   };
 
   useEffect(() => {
@@ -39,7 +45,10 @@ function App() {
       setMsg(msg);
       switch (msg.type) {
         case "param_change": {
-          setPedalState((s) => ({ ...s, [msg.param]: msg.value }));
+          setPedalState((s) => ({
+            ...s,
+            [msg.param]: { value: msg.value, text: msg.text },
+          }));
           break;
         }
       }

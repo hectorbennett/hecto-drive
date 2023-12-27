@@ -189,7 +189,8 @@ impl Plugin for HectoDrive {
                 let _ = ctx.send_json(json!({
                     "type": "param_change",
                     "param": "drive",
-                    "value": params.drive.value(),
+                    "value": params.drive.unmodulated_normalized_value(),
+                    "text": params.drive.to_string()
                 }));
             }
 
@@ -197,7 +198,8 @@ impl Plugin for HectoDrive {
                 let _ = ctx.send_json(json!({
                     "type": "param_change",
                     "param": "gain",
-                    "value": params.gain.value(),
+                    "value": params.gain.unmodulated_normalized_value(),
+                    "text": params.gain.to_string()
                 }));
             }
         });

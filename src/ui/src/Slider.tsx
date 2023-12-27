@@ -24,6 +24,9 @@ interface SliderProps {
   /** Maximum possible value. */
   max?: number;
 
+  /** Custom text for the value. */
+  text?: string;
+
   /** The number of decimal places to round to. */
   decimalPlaces?: number;
 
@@ -37,6 +40,7 @@ export const Slider = ({
   min = 0,
   max = 100,
   decimalPlaces = 0,
+  text,
   value,
   onChange,
   label,
@@ -140,7 +144,7 @@ export const Slider = ({
             `}
             onMouseDown={startDrag}
           >
-            {round(value, decimalPlaces)}
+            {text || round(value, decimalPlaces)}
           </div>
         </div>
       </div>

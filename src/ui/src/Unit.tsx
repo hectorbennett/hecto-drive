@@ -1,10 +1,15 @@
 import { css } from "@emotion/react";
 import { Slider } from "./Slider";
 
-
 interface UnitProps {
-  drive: number;
-  gain: number;
+  drive: {
+    value: number;
+    text: string;
+  };
+  gain: {
+    value: number;
+    text: string;
+  };
   onChangeGain: (gain: number) => void;
   onChangeDrive: (drive: number) => void;
 }
@@ -49,18 +54,20 @@ export const Unit = ({
         `}
       >
         <Slider
-          value={gain}
+          value={gain.value}
           min={0}
           max={1}
           label="Gain"
+          text={gain.text}
           decimalPlaces={2}
           onChange={onChangeGain}
         />
         <Slider
-          value={drive}
+          value={drive.value}
           min={0}
           max={1}
           label="Drive"
+          text={drive.text}
           decimalPlaces={2}
           onChange={onChangeDrive}
         />

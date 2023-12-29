@@ -69,7 +69,7 @@ impl Default for HectoDriveParams {
         });
 
         Self {
-            // drive
+            // Drive
             drive: FloatParam::new(
                 "Drive",
                 200.0,
@@ -80,11 +80,11 @@ impl Default for HectoDriveParams {
                 },
             )
             .with_smoother(SmoothingStyle::Logarithmic(50.0))
-            .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
+            .with_value_to_string(formatters::v2s_f32_gain_to_db(1))
             .with_callback(drive_param_callback),
             drive_value_changed,
 
-            // gain
+            // Gain
             gain: FloatParam::new(
                 "Gain",
                 util::db_to_gain(0.0),
@@ -96,7 +96,7 @@ impl Default for HectoDriveParams {
             )
             .with_smoother(SmoothingStyle::Logarithmic(50.0))
             .with_unit(" dB")
-            .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
+            .with_value_to_string(formatters::v2s_f32_gain_to_db(1))
             .with_string_to_value(formatters::s2v_f32_gain_to_db())
             .with_callback(gain_param_callback),
             gain_value_changed,
@@ -161,7 +161,7 @@ impl Plugin for HectoDrive {
         let gain_value_changed = self.params.gain_value_changed.clone();
         let editor = WebViewEditor::new(
             HTMLSource::String(include_str!("../../ui/dist/index.html")),
-            (280, 520),
+            (550, 450),
         )
         .with_background_color((150, 150, 150, 255))
         .with_developer_mode(true)
@@ -190,6 +190,7 @@ impl Plugin for HectoDrive {
                     "type": "param_change",
                     "param": "drive",
                     "value": params.drive.unmodulated_normalized_value(),
+                    "text": params.drive.to_string()
                 }));
             }
 
@@ -198,6 +199,7 @@ impl Plugin for HectoDrive {
                     "type": "param_change",
                     "param": "gain",
                     "value": params.gain.unmodulated_normalized_value(),
+                    "text": params.gain.to_string()
                 }));
             }
         });

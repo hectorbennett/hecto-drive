@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { css } from "@emotion/react";
 import "./App.css";
-import Pedal from "./Pedal";
+import { Unit } from "./Unit";
 
 const sendToPlugin = (msg: unknown) => {
   /* Send message to nih_plug_webview */
@@ -16,19 +16,22 @@ const sendToPlugin = (msg: unknown) => {
 
 function App() {
   const [pedalState, setPedalState] = useState({
-    on: false,
-    drive: 0.5,
-    gain: 0.5,
+    drive: {
+      value: 1,
+      text: "80",
+    },
+    gain: {
+      value: 1,
+      text: "30.00 dB",
+    },
   });
 
-  const setDrive = (drive: number) => {
-    setPedalState((s) => ({ ...s, drive }));
-    sendToPlugin({ type: "SetDrive", value: drive });
+  const setDrive = (value: number) => {
+    sendToPlugin({ type: "SetDrive", value });
   };
 
-  const setGain = (gain: number) => {
-    setPedalState((s) => ({ ...s, gain }));
-    sendToPlugin({ type: "SetGain", value: gain });
+  const setGain = (value: number) => {
+    sendToPlugin({ type: "SetGain", value });
   };
 
   useEffect(() => {
@@ -37,7 +40,13 @@ function App() {
     window.onPluginMessage = (msg) => {
       switch (msg.type) {
         case "param_change": {
-          setPedalState((s) => ({ ...s, [msg.param]: msg.value }));
+          setPedalState((s) => ({
+            ...s,
+            [msg.param]: {
+              value: msg.value,
+              text: msg.text.replace(" dB", ""),
+            },
+          }));
           break;
         }
       }
@@ -56,12 +65,7 @@ function App() {
         gap: 20px;
       `}
     >
-      <Pedal
-        {...pedalState}
-        onChangeDrive={setDrive}
-        onChangeGain={setGain}
-        onToggleOn={() => setPedalState((s) => ({ ...s, on: !s.on }))}
-      />
+      <Unit {...pedalState} onChangeDrive={setDrive} onChangeGain={setGain} />
     </div>
   );
 }

@@ -15,8 +15,6 @@ const sendToPlugin = (msg: unknown) => {
 };
 
 function App() {
-  const [msg, setMsg] = useState<object>({ Hello: "World" });
-
   const [pedalState, setPedalState] = useState({
     drive: {
       value: 1,
@@ -29,12 +27,10 @@ function App() {
   });
 
   const setDrive = (value: number) => {
-    // setPedalState((s) => ({ ...s, ...{ drive: state } }));
     sendToPlugin({ type: "SetDrive", value });
   };
 
   const setGain = (value: number) => {
-    // setPedalState((s) => ({ ...s, ...{ gain: state } }));
     sendToPlugin({ type: "SetGain", value });
   };
 
@@ -42,12 +38,14 @@ function App() {
     /* receive messages from nih_plug_webview */
     // @ts-ignore
     window.onPluginMessage = (msg) => {
-      setMsg(msg);
       switch (msg.type) {
         case "param_change": {
           setPedalState((s) => ({
             ...s,
-            [msg.param]: { value: msg.value, text: msg.text },
+            [msg.param]: {
+              value: msg.value,
+              text: msg.text.replace(" dB", ""),
+            },
           }));
           break;
         }
@@ -67,28 +65,7 @@ function App() {
         gap: 20px;
       `}
     >
-      {/* <Pedal
-        {...pedalState}
-        onChangeDrive={setDrive}
-        onChangeGain={setGain}
-        onToggleOn={() => setPedalState((s) => ({ ...s, on: !s.on }))}
-      /> */}
-      <div
-        css={css`
-          height: 200px;
-          display: flex;
-          align-items: center;
-        `}
-      >
-        {JSON.stringify(msg)}
-      </div>
-      <div
-        css={css`
-          overflow: hidden;
-        `}
-      >
-        <Unit {...pedalState} onChangeDrive={setDrive} onChangeGain={setGain} />
-      </div>
+      <Unit {...pedalState} onChangeDrive={setDrive} onChangeGain={setGain} />
     </div>
   );
 }

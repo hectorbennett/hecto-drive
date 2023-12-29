@@ -80,7 +80,7 @@ impl Default for HectoDriveParams {
                 },
             )
             .with_smoother(SmoothingStyle::Logarithmic(50.0))
-            .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
+            .with_value_to_string(formatters::v2s_f32_gain_to_db(1))
             .with_callback(drive_param_callback),
             drive_value_changed,
 
@@ -96,7 +96,7 @@ impl Default for HectoDriveParams {
             )
             .with_smoother(SmoothingStyle::Logarithmic(50.0))
             .with_unit(" dB")
-            .with_value_to_string(formatters::v2s_f32_gain_to_db(2))
+            .with_value_to_string(formatters::v2s_f32_gain_to_db(1))
             .with_string_to_value(formatters::s2v_f32_gain_to_db())
             .with_callback(gain_param_callback),
             gain_value_changed,

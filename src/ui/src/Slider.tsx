@@ -34,6 +34,11 @@ interface SliderProps {
   label?: ReactNode;
 }
 
+/**
+ * Slider component.
+ *
+ * @fa-component
+ */
 export const Slider = ({
   width = 60,
   height = 200,
@@ -125,22 +130,24 @@ export const Slider = ({
             css={css`
               border: 2px solid black;
               border-radius: 9999px;
-              width: ${width - 2}px;
-              min-width: ${width - 2}px;
-              height: ${width - 2}px;
-              min-height: ${width - 2}px;
+              width: ${width}px;
+              min-width: ${width}px;
+              height: ${width}px;
+              min-height: ${width}px;
               box-sizing: border-box;
               display: flex;
               align-items: center;
               justify-content: center;
-              box-shadow: -2px 2px 0px 1px rgb(0, 0, 0);
+              box-shadow:
+                -3px 2px 0px 0px rgb(0, 0, 0),
+                0px 6px 0px 1px rgba(0, 0, 0, 0.1);
               margin-left: 2px;
               margin-top: -2px;
               background: #f1ea50;
               z-index: 1000;
-              font-family: sans-serif;
               font-size: 22px;
               user-select: none;
+              font-family: "Russo One", sans-serif;
             `}
             onMouseDown={startDrag}
           >
@@ -150,7 +157,8 @@ export const Slider = ({
       </div>
       <label
         css={css`
-          font-family: sans-serif;
+          font-family: "Archivo Expanded", sans-serif;
+          font-style: italic;
         `}
       >
         {label}

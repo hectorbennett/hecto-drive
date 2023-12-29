@@ -37,10 +37,11 @@ export const Unit = ({
       <div
         css={css`
           text-align: center;
-          font-family: sans-serif;
+          font-family: "Archivo Expanded", sans-serif;
+          font-style: italic;
         `}
       >
-        HectoDrive
+        Hectodrive
       </div>
       <div
         css={css`
@@ -57,7 +58,7 @@ export const Unit = ({
           value={gain.value}
           min={0}
           max={1}
-          label="Gain"
+          label="GAIN"
           text={gain.text}
           decimalPlaces={2}
           onChange={onChangeGain}
@@ -66,7 +67,7 @@ export const Unit = ({
           value={drive.value}
           min={0}
           max={1}
-          label="Drive"
+          label="DRIVE"
           text={drive.text}
           decimalPlaces={2}
           onChange={onChangeDrive}

@@ -1,26 +1,27 @@
-use nih_plug::audio_setup::{AudioIOLayout, AuxiliaryBuffers, PortNames};
-use nih_plug::buffer::Buffer;
-use nih_plug::context::gui::AsyncExecutor;
-use nih_plug::context::process::ProcessContext;
-use nih_plug::editor::Editor;
-use nih_plug::midi::MidiConfig;
-use nih_plug::nih_debug_assert_eq;
-use nih_plug::params::range::FloatRange;
-use nih_plug::params::smoothing::SmoothingStyle;
-use nih_plug::params::{FloatParam, Params};
-use nih_plug::plugin::clap::ClapPlugin;
-use nih_plug::plugin::vst3::Vst3Plugin;
-use nih_plug::plugin::{Plugin, ProcessStatus};
-use nih_plug::prelude::Param;
-use nih_plug::wrapper::clap::features::ClapFeature;
-use nih_plug::wrapper::vst3::subcategories::Vst3SubCategory;
-use nih_plug::{formatters, nih_export_clap, nih_export_vst3, util};
+use nih_plug::{
+    audio_setup::{AudioIOLayout, AuxiliaryBuffers, PortNames},
+    buffer::Buffer,
+    context::{gui::AsyncExecutor, process::ProcessContext},
+    editor::Editor,
+    formatters,
+    midi::MidiConfig,
+    nih_debug_assert_eq, nih_export_clap, nih_export_vst3,
+    params::{range::FloatRange, smoothing::SmoothingStyle, FloatParam, Params},
+    plugin::{clap::ClapPlugin, vst3::Vst3Plugin, Plugin, ProcessStatus},
+    prelude::Param,
+    util,
+    wrapper::{clap::features::ClapFeature, vst3::subcategories::Vst3SubCategory},
+};
 use nih_plug_webview::{HTMLSource, WebViewEditor};
 use serde::Deserialize;
 use serde_json::json;
-use std::num::NonZeroU32;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
+use std::{
+    num::NonZeroU32,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc,
+    },
+};
 
 mod drive;
 
